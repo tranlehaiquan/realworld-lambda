@@ -1,0 +1,20 @@
+org: qtran
+app: realworld-lambda
+service: realworld-lambda
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  hello:
+    handler: src/handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
