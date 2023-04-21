@@ -1,7 +1,12 @@
+import { APIGatewayProxyResult } from "aws-lambda";
+
 // POST signIn
-export const signIn = () => {
+export const signIn = async (): Promise<APIGatewayProxyResult> => {
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(
       {
         message: "SignIn",
@@ -13,9 +18,12 @@ export const signIn = () => {
 };
 
 // POST signUp
-export const signUp = () => {
+export const signUp = async (): Promise<APIGatewayProxyResult> => {
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(
       {
         message: "SignUp",
@@ -27,9 +35,12 @@ export const signUp = () => {
 }
 
 // GET whoAmI
-export const whoAmI = () => {
+export const whoAmI = async (): Promise<APIGatewayProxyResult> => {
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(
       {
         message: "WhoAmI",
@@ -41,9 +52,12 @@ export const whoAmI = () => {
 }
 
 // PUT user
-export const updateUser = () => {
+export const updateUser = async (): Promise<APIGatewayProxyResult> => {
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(
       {
         message: "UpdateCurrentUser",

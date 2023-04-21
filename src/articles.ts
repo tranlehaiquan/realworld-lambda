@@ -158,7 +158,7 @@ export const getTags = async () => {
     statusCode: 200,
     body: JSON.stringify(
       {
-        message: "GetTags",
+        message: "get task",
       },
       null,
       2

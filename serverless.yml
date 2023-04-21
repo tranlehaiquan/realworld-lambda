@@ -6,18 +6,11 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  hello:
-    handler: src/handler.hello
-    events:
-      - httpApi:
-          path: /
-          method: get
-  
   signIn:
     handler: src/users.signIn
     events:
       - httpApi:
-          path: /signIn
+          path: /api/users/login
           method: post
   signUp:
     handler: src/users.signUp
@@ -25,7 +18,109 @@ functions:
       - httpApi:
           path: /api/users
           method: post
-
+  getCurrentUser:
+    handler: src/users.whoAmI
+    events:
+      - httpApi:
+          path: /api/user
+          method: get
+  updateCurrentUser:
+    handler: src/users.updateUser
+    events:
+      - httpApi:
+          path: /api/user
+          method: post
+  getProfile:
+    handler: src/profiles.getProfile
+    events:
+      - httpApi:
+          path: /api/profiles/{username}
+          method: get
+  followUser:
+    handler: src/profiles.followUser
+    events:
+      - httpApi:
+          path: /api/profiles/{username}/follow
+          method: post
+  unFollowUser:
+    handler: src/profiles.unFollowUser
+    events:
+      - httpApi:
+          path: /api/profiles/{username}/follow
+          method: delete
+  getArticles:
+    handler: src/articles.getArticles
+    events:
+      - httpApi:
+          path: /api/articles
+          method: get
+  getFeed:
+    handler: src/articles.getFeedArticles
+    events:
+      - httpApi:
+          path: /api/articles/feed
+          method: get
+  getArticle:
+    handler: src/articles.getArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}
+          method: get
+  createArticle:
+    handler: src/articles.createArticle
+    events:
+      - httpApi:
+          path: /api/articles
+          method: post
+  updateArticle:
+    handler: src/articles.updateArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}
+          method: put
+  deleteArticle:
+    handler: src/articles.deleteArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}
+          method: delete
+  addComment:
+    handler: src/articles.addCommentToArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/comments
+          method: post
+  getComments:
+    handler: src/articles.getCommentsFromArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/comments
+          method: get
+  deleteComment:
+    handler: src/articles.deleteComment
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/comments/{id}
+          method: delete
+  favoriteArticle:
+    handler: src/articles.favoriteArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/favorite
+          method: post
+  unFavoriteArticle:
+    handler: src/articles.unFavoriteArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/favorite
+          method: delete
+  getTags:
+    handler: src/articles.getTags
+    events:
+      - httpApi:
+          path: /api/tags
+          method: get
+  
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
