@@ -4,6 +4,8 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  environment:
+    DYNAMODB_NAMESPACE: ${opt:stage, "dev"}
 
 functions:
   signIn:
@@ -124,3 +126,38 @@ functions:
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+
+resources:
+  Resources:
+
+    UsersDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: username
+            AttributeType: S
+          -
+            AttributeName: email
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: username
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: realworld-${self:provider.environment.DYNAMODB_NAMESPACE}-users
+        GlobalSecondaryIndexes:
+          -
+            IndexName: email
+            KeySchema:
+              -
+                AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
