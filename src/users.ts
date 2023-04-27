@@ -1,22 +1,14 @@
 import { APIGatewayProxyResult } from "aws-lambda";
 import { QueryCommand, QueryCommandInput } from "@aws-sdk/client-dynamodb";
-import { getDynamodbClient, userTable } from "./dynamodb";
+import { AppDataSource } from "./data-source";
+import { User } from "./entity/User";
 
 // POST signIn
 export const signIn = async (): Promise<APIGatewayProxyResult> => {
-  const dynamodbClient = getDynamodbClient();
-
-  const params: QueryCommandInput = {
-    TableName: userTable,
-    KeyConditionExpression: "username = :username",
-    ExpressionAttributeValues: {
-      ":username": { S: "test2" },
-    },
-  };
-  const command = new QueryCommand(params);
-  const result = await dynamodbClient.send(command);
   // pull all record from the table users
-
+  await AppDataSource.initialize();
+  const user = await AppDataSource.manager.find(User);
+  console.log(user);
   return {
     statusCode: 200,
     headers: {
@@ -25,7 +17,6 @@ export const signIn = async (): Promise<APIGatewayProxyResult> => {
     body: JSON.stringify(
       {
         message: "SignIn",
-        data: result,
       },
       null,
       2
