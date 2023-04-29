@@ -1,18 +1,66 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
-
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { randomBytes, pbkdf2Sync } from "crypto";
 @Entity()
-export class User {
+export class User extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number
+  @Column({ unique: true })
+  email: string;
 
-    @Column()
-    firstName: string
+  @Column({ unique: true })
+  username: string;
 
-    @Column()
-    lastName: string
+  @Column({ type: "text", nullable: true })
+  bio: string;
 
-    @Column()
-    age: number
+  @Column({ nullable: true })
+  image: string;
 
+  @Column()
+  salt: string;
+
+  @Column()
+  hash: string;
+
+  // fnc set password
+  async setPassword(password: string): Promise<void> {
+    this.salt = randomBytes(16).toString("hex");
+    this.hash = pbkdf2Sync(password, this.salt, 10000, 512, "sha512").toString(
+      "hex"
+    );
+  }
+
+  // find user with username and password
+  static async findUserByEmailAndPassword(
+    email: string,
+    password: string
+  ): Promise<User> {
+    const user = await this.findOneBy({ email });
+    if (!user) {
+      return null;
+    }
+
+    const hash = pbkdf2Sync(password, user.salt, 10000, 512, "sha512").toString(
+      "hex"
+    );
+
+    if (hash !== user.hash) {
+      return null;
+    }
+
+    return user;
+  }
+
+  // return user without sensitive data
+  excludeSensitiveData(): {
+    id: number;
+    username: string;
+    email: string;
+    bio: string;
+    image: string;
+  } {
+    const { id, username, email, bio, image } = this;
+    return { id, username, email, bio, image };
+  }
 }

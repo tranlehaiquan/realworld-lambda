@@ -10,12 +10,18 @@
       "typeorm": "typeorm-ts-node-commonjs"
    },
    "dependencies": {
-      "@aws-sdk/client-dynamodb": "^3.316.0",
+      "@middy/core": "^4.4.0",
+      "@middy/http-error-handler": "^4.4.0",
+      "@middy/http-json-body-parser": "^4.4.0",
+      "@types/http-errors": "^2.0.1",
       "bcryptjs": "^2.4.3",
+      "http-errors": "^2.0.0",
       "jsonwebtoken": "^9.0.0",
-      "pg": "^8.4.0",
+      "lodash": "^4.17.21",
+      "pg": "^8.10.0",
       "reflect-metadata": "^0.1.13",
-      "typeorm": "0.3.15"
+      "typeorm": "0.3.15",
+      "yup": "^1.1.1"
    },
    "devDependencies": {
       "@types/aws-lambda": "^8.10.101",
