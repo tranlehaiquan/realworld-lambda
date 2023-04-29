@@ -8,6 +8,7 @@ import createError from "http-errors";
 import { connect } from "../data-source";
 import { User } from "../entity/User";
 import { validator } from "../middleware/validator";
+import { signJWT } from "../utils/jwt";
 
 const schema = yup.object().shape({
   body: yup.object().shape({
@@ -36,22 +37,30 @@ const handler = async (
   const user = await User.findUserByEmailAndPassword(email, password);
 
   if (!user) {
-    throw createError.Unauthorized(JSON.stringify({
-      message: "Email or password is invalid!",
-    }));
+    throw createError.Unauthorized(
+      JSON.stringify({
+        message: "Email or password is invalid!",
+      })
+    );
   }
 
   try {
-    await user.save();
+    const token = await signJWT(user.excludeSensitiveData());
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user.excludeSensitiveData()),
+      body: JSON.stringify({
+        token,
+      }),
     };
   } catch (err) {
-    throw createError.UnprocessableEntity("Something went wrong!");
+    throw createError.Unauthorized(
+      JSON.stringify({
+        message: err.message,
+      })
+    );
   }
 };
 

@@ -19,9 +19,9 @@ export const schema = yup.object().shape({
       abortEarly: false
     })
   } catch(err) {
-    const error = createError.BadRequest({
+    const error = createError.BadRequest(JSON.stringify({
       ...pick(err, ['message', 'errors'])
-    });
+    }));
     console.log(JSON.stringify(error));
   }
 

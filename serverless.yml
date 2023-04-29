@@ -6,6 +6,11 @@ provider:
   runtime: nodejs18.x
   environment:
     DYNAMODB_NAMESPACE: ${opt:stage, "dev"}
+    JWT_TOKEN_KEY: ${env:jwt, "hello"}
+
+# custom:
+#   esbuild:
+#     external: ['pg-native']
 
 functions:
   signIn:

@@ -1,5 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import { randomBytes, pbkdf2Sync } from "crypto";
+
+export type UserExport = {
+  id: number;
+  username: string;
+  email: string;
+  bio: string;
+  image: string;
+};
+
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
@@ -53,13 +62,7 @@ export class User extends BaseEntity {
   }
 
   // return user without sensitive data
-  excludeSensitiveData(): {
-    id: number;
-    username: string;
-    email: string;
-    bio: string;
-    image: string;
-  } {
+  excludeSensitiveData(): UserExport {
     const { id, username, email, bio, image } = this;
     return { id, username, email, bio, image };
   }
