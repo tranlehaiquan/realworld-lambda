@@ -12,6 +12,7 @@
    "dependencies": {
       "@middy/core": "^4.4.0",
       "@middy/http-error-handler": "^4.4.0",
+      "@middy/http-header-normalizer": "^4.4.0",
       "@middy/http-json-body-parser": "^4.4.0",
       "@types/http-errors": "^2.0.1",
       "bcryptjs": "^2.4.3",

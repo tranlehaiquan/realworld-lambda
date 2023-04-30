@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 import addMilliseconds from "date-fns/addMilliseconds";
 import { UserExport } from "../entity/User";
 
@@ -35,8 +35,8 @@ export const verifyJWT = (token: string): Promise<UserExport> => {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, (err, decoded: UserExport) => {
       if (err) {
         let { message } = err;
-        if (err.name === "TokenExpiredError")
-          message = "Token has been expired";
+        if (err instanceof TokenExpiredError)
+          message = `Token expired at ${new Date(err.expiredAt).toUTCString()}`;
         const error = new Error(message);
         rej(error);
       }

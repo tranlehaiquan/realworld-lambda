@@ -1,7 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import middy from "@middy/core";
-import httpErrorHandler from "@middy/http-error-handler";
-import jsonBodyParser from "@middy/http-json-body-parser";
 import * as yup from "yup";
 import createError from "http-errors";
 
@@ -9,20 +7,15 @@ import { connect } from "../data-source";
 import { User } from "../entity/User";
 import { validator } from "../middleware/validator";
 import { signJWT } from "../utils/jwt";
+import baseMiddlewares from "../middleware/baseMiddlewares";
+import { getSchemaByFields } from "../yup/getSchema";
 
 const schema = yup.object().shape({
-  body: yup.object().shape({
-    email: yup
-      .string()
-      .email("Email must be a valid email")
-      .required("Email is required"),
-    password: yup.string().required("Password is required"),
-  }),
+  body: getSchemaByFields(["password", "email"]),
 });
 
 const middlewares = [
-  httpErrorHandler(),
-  jsonBodyParser(),
+  ...baseMiddlewares,
   validator({
     schema,
   }),

@@ -25,18 +25,18 @@ functions:
       - httpApi:
           path: /api/users
           method: post
-  # getCurrentUser:
-  #   handler: src/users.whoAmI
-  #   events:
-  #     - httpApi:
-  #         path: /api/user
-  #         method: get
-  # updateCurrentUser:
-  #   handler: src/users.updateUser
-  #   events:
-  #     - httpApi:
-  #         path: /api/user
-  #         method: post
+  whoAmI:
+    handler: src/users/whoAmI.whoAmI
+    events:
+      - httpApi:
+          path: /api/users/me
+          method: post
+  updateCurrentUser:
+    handler: src/users/updateUser.updateUser
+    events:
+      - httpApi:
+          path: /api/users/me
+          method: put
   # getProfile:
   #   handler: src/profiles.getProfile
   #   events:
