@@ -6,10 +6,10 @@ let connected = false;
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: "localhost",
+  host: "database-1.cszuztaijdzp.us-east-1.rds.amazonaws.com",
   port: 5432,
   username: "postgres",
-  password: "postgres",
+  password: "urEk|[G~4sltqJ%*zf)8SePM]1A-",
   database: "postgres",
   synchronize: true,
   logging: false,
