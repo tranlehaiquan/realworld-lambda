@@ -52,12 +52,12 @@ functions:
       - httpApi:
           path: /api/profiles/{username}/follow
           method: delete
-  # getArticles:
-  #   handler: src/articles.getArticles
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles
-  #         method: get
+  getArticles:
+    handler: src/articles/getArticles.getArticles
+    events:
+      - httpApi:
+          path: /api/articles
+          method: get
   # getFeed:
   #   handler: src/articles.getFeedArticles
   #   events:

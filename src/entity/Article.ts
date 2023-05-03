@@ -21,8 +21,8 @@ export class Article extends BaseEntity {
   @Column({ unique: true })
   slug: string;
 
-  @Column()
-  tagList: string;
+  @Column("text", { array: true, nullable: true })
+  tagList: string[];
 
   @CreateDateColumn()
   createdAt: Date;

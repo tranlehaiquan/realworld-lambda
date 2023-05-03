@@ -36,7 +36,7 @@ const handler = async (
   newArticle.title = title;
   newArticle.description = description;
   newArticle.body = body;
-  newArticle.tagList = (tagList || []).join(", ");
+  newArticle.tagList = tagList;
   newArticle.author = { id: auth.user.id } as any;
 
   const result = await newArticle.save();
