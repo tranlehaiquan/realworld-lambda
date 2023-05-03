@@ -64,18 +64,18 @@ functions:
   #     - httpApi:
   #         path: /api/articles/feed
   #         method: get
-  # getArticle:
-  #   handler: src/articles.getArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}
-  #         method: get
-  # createArticle:
-  #   handler: src/articles.createArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles
-  #         method: post
+  getArticleBySlug:
+    handler: src/articles/getArticleBySlug.getArticleBySlug
+    events:
+      - httpApi:
+          path: /api/articles/{slug}
+          method: get
+  createArticle:
+    handler: src/articles/createArticle.createArticle
+    events:
+      - httpApi:
+          path: /api/articles
+          method: post
   # updateArticle:
   #   handler: src/articles.updateArticle
   #   events:

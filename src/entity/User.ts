@@ -33,10 +33,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   image: string;
 
-  @Column()
+  @Column({ select: false })
   salt: string;
 
-  @Column()
+  @Column({ select: false })
   hash: string;
 
   @ManyToMany(() => User)
@@ -66,7 +66,8 @@ export class User extends BaseEntity {
     email: string,
     password: string
   ): Promise<User> {
-    const user = await this.findOneBy({ email });
+    const user = await this.findOne({ where: { email }, select: ['salt', 'hash'] });
+
     if (!user) {
       return null;
     }
