@@ -34,24 +34,24 @@ functions:
       - httpApi:
           path: /api/users/me
           method: put
-  # getProfile:
-  #   handler: src/profiles.getProfile
-  #   events:
-  #     - httpApi:
-  #         path: /api/profiles/{username}
-  #         method: get
-  # followUser:
-  #   handler: src/profiles.followUser
-  #   events:
-  #     - httpApi:
-  #         path: /api/profiles/{username}/follow
-  #         method: post
-  # unFollowUser:
-  #   handler: src/profiles.unFollowUser
-  #   events:
-  #     - httpApi:
-  #         path: /api/profiles/{username}/follow
-  #         method: delete
+  getProfile:
+    handler: src/profiles/getProfile.getProfile
+    events:
+      - httpApi:
+          path: /api/profiles/{username}
+          method: get
+  followUser:
+    handler: src/profiles/followUser.followUser
+    events:
+      - httpApi:
+          path: /api/profiles/{username}/follow
+          method: post
+  unFollowUser:
+    handler: src/profiles/unFollowUser.unFollowUser
+    events:
+      - httpApi:
+          path: /api/profiles/{username}/follow
+          method: delete
   # getArticles:
   #   handler: src/articles.getArticles
   #   events:
@@ -126,6 +126,5 @@ functions:
   #         method: get
   
 plugins:
-  # - serverless-esbuild
   - serverless-plugin-typescript
   - serverless-offline

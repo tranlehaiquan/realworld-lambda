@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { randomBytes, pbkdf2Sync } from "crypto";
 
 export type UserExport = {
@@ -31,6 +38,20 @@ export class User extends BaseEntity {
 
   @Column()
   hash: string;
+
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: "user_follower",
+    joinColumn: {
+      name: "userId",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "followerId",
+      referencedColumnName: "id",
+    },
+  })
+  followers: User[];
 
   // fnc set password
   async setPassword(password: string): Promise<void> {

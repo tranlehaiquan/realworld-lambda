@@ -3,7 +3,12 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import createError from "http-errors";
 import { verifyJWT } from "../utils/jwt";
 
-export const authenticate = () => {
+type Options = {
+  required: boolean
+}
+
+export const authenticate = (options: Options = { required: true }) => {
+  const { required } = options;
   const before: middy.MiddlewareFn<
     APIGatewayProxyEvent & { auth: { user: any; token: string } },
     APIGatewayProxyResult
@@ -11,7 +16,7 @@ export const authenticate = () => {
     const event = handler.event;
     const authorization = event.headers?.authorization;
 
-    if(!authorization) {
+    if(!authorization && required) {
       throw new createError.Unauthorized(
         JSON.stringify({
           message: 'Authorization header is required',
@@ -27,6 +32,10 @@ export const authenticate = () => {
         token,
       };
     } catch (err) {
+      if(!required) {
+        return;
+      }
+
       const error = new createError.Unauthorized(
         JSON.stringify({
           message: err.message,
