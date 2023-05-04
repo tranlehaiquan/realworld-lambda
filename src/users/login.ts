@@ -3,7 +3,8 @@ import middy from "@middy/core";
 import * as yup from "yup";
 import createError from "http-errors";
 
-import { connect } from "../data-source";
+// import { connect } from "../data-source";
+import { connect } from "../prisma-db";
 import { User } from "../entity/User";
 import { validator } from "../middleware/validator";
 import { signJWT } from "../utils/jwt";
@@ -25,36 +26,52 @@ const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   const { body }: any = event;
-  await connect();
+  const client = await connect();
+
   const { password, email } = body;
-  const user = await User.findUserByEmailAndPassword(email, password);
+  // const user = await User.findUserByEmailAndPassword(email, password);
+  const user = await client.user.findFirst({
+    where: {
+      email,
+    },
+  });
 
-  if (!user) {
-    throw createError.Unauthorized(
-      JSON.stringify({
-        message: "Email or password is invalid!",
-      })
-    );
-  }
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user
+    }),
+  };
 
-  try {
-    const token = await signJWT(user.excludeSensitiveData());
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token,
-      }),
-    };
-  } catch (err) {
-    throw createError.Unauthorized(
-      JSON.stringify({
-        message: err.message,
-      })
-    );
-  }
+  // if (!user) {
+  //   throw createError.Unauthorized(
+  //     JSON.stringify({
+  //       message: "Email or password is invalid!",
+  //     })
+  //   );
+  // }
+
+  // try {
+  //   const token = await signJWT(user.excludeSensitiveData());
+  //   return {
+  //     statusCode: 200,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       token,
+  //     }),
+  //   };
+  // } catch (err) {
+  //   throw createError.Unauthorized(
+  //     JSON.stringify({
+  //       message: err.message,
+  //     })
+  //   );
+  // }
 };
 
 export const login = middy(handler).use(middlewares);

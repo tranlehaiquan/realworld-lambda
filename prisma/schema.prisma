@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model article {
+  id          String   @id(map: "PK_40808690eb7b915046558c0f81b") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title       String   @db.VarChar
+  description String   @db.VarChar
+  body        String?
+  slug        String   @unique(map: "UQ_0ab85f4be07b22d79906671d72f") @db.VarChar
+  createdAt   DateTime @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime @default(now()) @db.Timestamp(6)
+  authorId    String?  @db.Uuid
+  tagList     String[]
+  user        user?    @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_a9c5f4ec6cceb1604b4a3c84c87")
+}
+
+model user {
+  id                                           String          @id(map: "PK_cace4a159ff9f2512dd42373760") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  email                                        String          @unique(map: "UQ_e12875dfb3b1d92d7d7c5377e22") @db.VarChar
+  username                                     String          @unique(map: "UQ_78a916df40e02a9deb1c4b75edb") @db.VarChar
+  bio                                          String?
+  image                                        String?         @db.VarChar
+  salt                                         String          @db.VarChar
+  hash                                         String          @db.VarChar
+  article                                      article[]
+  user_follower_user_follower_followerIdTouser user_follower[] @relation("user_follower_followerIdTouser")
+  user_follower_user_follower_userIdTouser     user_follower[] @relation("user_follower_userIdTouser")
+}
+
+model user_follower {
+  userId                              String @db.Uuid
+  followerId                          String @db.Uuid
+  user_user_follower_followerIdTouser user   @relation("user_follower_followerIdTouser", fields: [followerId], references: [id], onDelete: Cascade, map: "FK_86f1191bfce87ddfcaf68438ddf")
+  user_user_follower_userIdTouser     user   @relation("user_follower_userIdTouser", fields: [userId], references: [id], onDelete: Cascade, map: "FK_c614f68194d9488c45840908fb5")
+
+  @@id([userId, followerId], map: "PK_9c78b540dd7907e72c3c5d8242a")
+  @@index([followerId], map: "IDX_86f1191bfce87ddfcaf68438dd")
+  @@index([userId], map: "IDX_c614f68194d9488c45840908fb")
+}
