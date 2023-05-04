@@ -1,6 +1,5 @@
 import { APIGatewayProxyResult } from "aws-lambda";
 import middy from "@middy/core";
-import * as yup from "yup";
 import createError from "http-errors";
 
 import { connect } from "../data-source";
@@ -8,6 +7,7 @@ import { User } from "../entity/User";
 import baseMiddlewares from "../middleware/baseMiddlewares";
 import { authenticate } from "../middleware/authenticate";
 import { APIGatewayProxyEventExtend } from "../interface";
+import { UserToFollower } from "../entity/UserToFollower";
 
 const middlewares = [...baseMiddlewares, authenticate({ required: true })];
 
@@ -23,31 +23,35 @@ const handler = async (
   }
 
   await connect();
-  const user = await User.findOne({
+  const userDetail = await User.findOne({
+    where: { id: auth.user.id },
+  });
+
+  const profilesTarget = await User.findOne({
     where: {
       username,
     },
-  
-    // load realtions
-    relations: {
-      followers: true,
-    },
   });
 
-  if (!user) {
+  if (!profilesTarget) {
     throw new createError.NotFound("User not found");
   }
 
-  // follow
-  user.followers = [...(user.followers || []), auth.user];
-  await user.save();
+  const newUserToFollower = UserToFollower.create({
+    user: profilesTarget,
+    follower: userDetail,
+  });
+
+  await newUserToFollower.save();
 
   return {
     statusCode: 200,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ...user.excludeSensitiveData(), isFollowing: true }),
+    body: JSON.stringify({
+      isFollowing: true,
+    }),
   };
 };
 

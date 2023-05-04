@@ -34,6 +34,12 @@ functions:
       - httpApi:
           path: /api/users/me
           method: put
+  getListFollowers:
+    handler: src/profiles/getListFollowers.getListFollowers
+    events:
+      - httpApi:
+          path: /api/profiles/{username}/followers
+          method: get
   getProfile:
     handler: src/profiles/getProfile.getProfile
     events:
@@ -58,12 +64,12 @@ functions:
       - httpApi:
           path: /api/articles
           method: get
-  # getFeed:
-  #   handler: src/articles.getFeedArticles
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/feed
-  #         method: get
+  getFeed:
+    handler: src/articles/getFeedArticles.getFeedArticles
+    events:
+      - httpApi:
+          path: /api/articles/feed
+          method: get
   getArticleBySlug:
     handler: src/articles/getArticleBySlug.getArticleBySlug
     events:

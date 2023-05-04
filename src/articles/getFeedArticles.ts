@@ -1,31 +1,44 @@
 import middy from "@middy/core";
+import { In } from "typeorm";
+import { APIGatewayProxyResult } from "aws-lambda";
 
 import { connect } from "../data-source";
 import baseMiddlewares from "../middleware/baseMiddlewares";
 import { authenticate } from "../middleware/authenticate";
 import { APIGatewayProxyEventExtend } from "../interface";
-import { APIGatewayProxyResult } from "aws-lambda";
 import { Article } from "../entity/Article";
-import { ArrayContains } from "typeorm";
+import { User } from "../entity/User";
+import { UserToFollower } from "../entity/UserToFollower";
 
-const middlewares = [...baseMiddlewares, authenticate({ required: false })];
+const middlewares = [...baseMiddlewares, authenticate({ required: true })];
 
 // get article detail by slug
 const handler = async (
   event: APIGatewayProxyEventExtend
 ): Promise<APIGatewayProxyResult> => {
+  const { auth } = event;
+  const { user } = auth;
   const { queryStringParameters } = event;
-  const { author, tag, limit = 20, offset = 0 } = queryStringParameters || {};
-
-  const tags = tag ? tag.split(",") : [];
+  const { limit = 20, offset = 0 } = queryStringParameters || {};
   await connect();
+
+  // get all users that auth.user follow
+  const followers = (
+    await UserToFollower.find({
+      where: {
+        followerId: user.id,
+      },
+      select: ["userId"],
+    })
+  ).map((item) => item.userId);
+
   // get article where author = author
   const articles = await Article.find({
     where: {
+      // author is in followers
       author: {
-        id: author as any,
+        id: In(followers),
       },
-      tagList: ArrayContains(tags),
     },
     take: Number(limit),
     skip: Number(offset),
@@ -44,4 +57,4 @@ const handler = async (
   };
 };
 
-export const getArticles = middy(handler).use(middlewares);
+export const getFeedArticles = middy(handler).use(middlewares);

@@ -15,44 +15,39 @@ const middlewares = [...baseMiddlewares, authenticate({ required: false })];
 const handler = async (
   event: APIGatewayProxyEventExtend
 ): Promise<APIGatewayProxyResult> => {
-  const auth = event.auth;
-  // get username
+  // username
   const { username } = event.pathParameters;
   if (!username) {
     throw new createError.BadRequest("Username is required");
   }
-
-  // get user target
   await connect();
-  const user = await User.findOneBy({
-    username,
+
+  // get user
+  const user = await User.findOne({
+    where: {
+      username,
+    },
+    select: ["id"],
   });
 
   if (!user) {
     throw new createError.NotFound("User not found");
   }
 
-  let isFollowing = false;
-  // check if user is authenticated
-  if (auth) {
-    // check if user is following
-    const follower = await UserToFollower.findOneBy({
-      followerId: auth.user.id,
+  const followers = await UserToFollower.find({
+    where: {
       userId: user.id,
-    });
-
-    if (follower) {
-      isFollowing = true;
-    }
-  }
+    },
+    relations: ["follower", "user"],
+  });
 
   return {
     statusCode: 200,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ...user.excludeSensitiveData(), isFollowing }),
+    body: JSON.stringify({ followers }),
   };
 };
 
-export const getProfile = middy(handler).use(middlewares);
+export const getListFollowers = middy(handler).use(middlewares);

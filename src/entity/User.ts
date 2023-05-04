@@ -39,20 +39,6 @@ export class User extends BaseEntity {
   @Column({ select: false })
   hash: string;
 
-  @ManyToMany(() => User)
-  @JoinTable({
-    name: "user_follower",
-    joinColumn: {
-      name: "userId",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "followerId",
-      referencedColumnName: "id",
-    },
-  })
-  followers: User[];
-
   // fnc set password
   async setPassword(password: string): Promise<void> {
     this.salt = randomBytes(16).toString("hex");
@@ -66,7 +52,9 @@ export class User extends BaseEntity {
     email: string,
     password: string
   ): Promise<User> {
-    const user = await this.findOne({ where: { email }, select: ['salt', 'hash'] });
+    const user = await this.findOne({ where: { email }, select: [
+      'id', 'username', 'email', 'salt', 'hash'
+    ] });
 
     if (!user) {
       return null;

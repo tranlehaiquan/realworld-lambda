@@ -1,6 +1,5 @@
 import { APIGatewayProxyResult } from "aws-lambda";
 import middy from "@middy/core";
-import * as yup from "yup";
 import createError from "http-errors";
 
 import { connect } from "../data-source";
@@ -8,6 +7,7 @@ import { User } from "../entity/User";
 import baseMiddlewares from "../middleware/baseMiddlewares";
 import { authenticate } from "../middleware/authenticate";
 import { APIGatewayProxyEventExtend } from "../interface";
+import { UserToFollower } from "../entity/UserToFollower";
 
 const middlewares = [...baseMiddlewares, authenticate({ required: true })];
 
@@ -25,9 +25,6 @@ const handler = async (
   await connect();
   const user = await User.findOne({
     where: { username },
-    relations: {
-      followers: true,
-    }
   });
 
   if (!user) {
@@ -35,10 +32,10 @@ const handler = async (
   }
 
   // unFollow
-  user.followers = user.followers.filter(
-    (follower) => follower.id !== auth.user.id
-  );
-  await user.save();
+  await UserToFollower.delete({
+    userId: user.id,
+    followerId: auth.user.id,
+  });
 
   return {
     statusCode: 200,
