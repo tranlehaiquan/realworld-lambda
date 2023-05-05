@@ -82,12 +82,12 @@ functions:
       - httpApi:
           path: /api/articles
           method: post
-  # updateArticle:
-  #   handler: src/articles.updateArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}
-  #         method: put
+  updateArticle:
+    handler: src/articles/updateArticle.updateArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}
+          method: put
   # deleteArticle:
   #   handler: src/articles.deleteArticle
   #   events:
