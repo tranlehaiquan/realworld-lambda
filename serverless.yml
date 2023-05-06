@@ -88,12 +88,12 @@ functions:
       - httpApi:
           path: /api/articles/{slug}
           method: put
-  # deleteArticle:
-  #   handler: src/articles.deleteArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}
-  #         method: delete
+  deleteArticle:
+    handler: src/articles/deleteArticle.deleteArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}
+          method: delete
   # addComment:
   #   handler: src/articles.addCommentToArticle
   #   events:
