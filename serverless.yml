@@ -94,24 +94,24 @@ functions:
       - httpApi:
           path: /api/articles/{slug}
           method: delete
-  # addComment:
-  #   handler: src/articles.addCommentToArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}/comments
-  #         method: post
-  # getComments:
-  #   handler: src/articles.getCommentsFromArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}/comments
-  #         method: get
-  # deleteComment:
-  #   handler: src/articles.deleteComment
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}/comments/{id}
-  #         method: delete
+  addComment:
+    handler: src/articles/addCommentToArticle.addCommentToArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/comments
+          method: post
+  getComments:
+    handler: src/articles/getCommentsFromArticle.getCommentsFromArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/comments
+          method: get
+  deleteComment:
+    handler: src/articles/deleteComment.deleteComment
+    events:
+      - httpApi:
+          path: /api/articles/comments/{id}
+          method: delete
   # favoriteArticle:
   #   handler: src/articles.favoriteArticle
   #   events:
