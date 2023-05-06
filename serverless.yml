@@ -112,18 +112,18 @@ functions:
       - httpApi:
           path: /api/articles/comments/{id}
           method: delete
-  # favoriteArticle:
-  #   handler: src/articles.favoriteArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}/favorite
-  #         method: post
-  # unFavoriteArticle:
-  #   handler: src/articles.unFavoriteArticle
-  #   events:
-  #     - httpApi:
-  #         path: /api/articles/{slug}/favorite
-  #         method: delete
+  favoriteArticle:
+    handler: src/articles/favoriteArticle.favoriteArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/favorite
+          method: post
+  unFavoriteArticle:
+    handler: src/articles/unFavoriteArticle.unFavoriteArticle
+    events:
+      - httpApi:
+          path: /api/articles/{slug}/favorite
+          method: delete
   # getTags:
   #   handler: src/articles.getTags
   #   events:

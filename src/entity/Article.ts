@@ -7,7 +7,7 @@ import toSlug from "../utils/toSlug";
 @Entity()
 export class Article extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column()
   title: string;
