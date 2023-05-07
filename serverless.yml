@@ -8,6 +8,7 @@ provider:
     DYNAMODB_NAMESPACE: ${opt:stage, "dev"}
     JWT_TOKEN_KEY: ${env:jwt, "hello"}
   stage: development
+  region: ap-southeast-1
 
 functions:
   signIn:
