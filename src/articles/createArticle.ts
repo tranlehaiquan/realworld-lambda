@@ -8,6 +8,8 @@ import { validator } from "../middleware/validator";
 import baseMiddlewares from "../middleware/baseMiddlewares";
 import { authenticate } from "../middleware/authenticate";
 import { APIGatewayProxyEventExtend } from "../interface";
+import { Tag } from "../entity/Tag";
+import { In } from "typeorm";
 
 const schema = yup.object().shape({
   body: yup.object().shape({
@@ -33,10 +35,12 @@ const handler = async (
   const { title, description, body, tagList } =
     event.body as SchemaBody["body"];
 
+  const tags = await Tag.handleAddTags([...new Set(tagList || [])]);
+
   newArticle.title = title;
   newArticle.description = description;
   newArticle.body = body;
-  newArticle.tagList = tagList;
+  newArticle.tagList = tags as any;
   newArticle.author = { id: auth.user.id } as any;
 
   const result = await newArticle.save();

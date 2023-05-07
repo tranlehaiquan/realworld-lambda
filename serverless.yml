@@ -124,12 +124,12 @@ functions:
       - httpApi:
           path: /api/articles/{slug}/favorite
           method: delete
-  # getTags:
-  #   handler: src/articles.getTags
-  #   events:
-  #     - httpApi:
-  #         path: /api/tags
-  #         method: get
+  getTags:
+    handler: src/tags.tags
+    events:
+      - httpApi:
+          path: /api/tags
+          method: get
   
 plugins:
   - serverless-plugin-typescript

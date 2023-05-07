@@ -5,6 +5,7 @@ import { Article } from "./entity/Article";
 import { UserToFollower } from "./entity/UserToFollower";
 import { Comment } from "./entity/Comment";
 import { ArticleToFavorite } from "./entity/ArticleToFavorite";
+import { Tag } from "./entity/Tag";
 
 let connected = false;
 
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   database: "postgres",
   synchronize: true,
   logging: false,
-  entities: [User, Article, UserToFollower, Comment, ArticleToFavorite],
+  entities: [User, Article, UserToFollower, Comment, ArticleToFavorite, Tag],
   migrations: [],
   subscribers: [],
 });

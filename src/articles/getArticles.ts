@@ -8,7 +8,7 @@ import { APIGatewayProxyResult } from "aws-lambda";
 import { Article } from "../entity/Article";
 import { ArrayContains, In } from "typeorm";
 import { ArticleToFavorite } from "../entity/ArticleToFavorite";
-import keyBy from 'lodash/keyBy';
+import keyBy from "lodash/keyBy";
 
 const middlewares = [...baseMiddlewares, authenticate({ required: false })];
 
@@ -34,14 +34,30 @@ const handler = async (
     loadRelationIds: true,
   });
 
+  if (!event.auth?.user) {
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        articles,
+        count: articles.length,
+      }),
+    };
+  }
+
   const articleIds = articles.map((article) => article.id);
   // find favorite article
-  const favoriteArticles = keyBy(await ArticleToFavorite.find({
-    where: {
-      articleId: In(articleIds),
-      userId: event.auth?.user?.id,
-    },
-  }), 'articleId');
+  const favoriteArticles = keyBy(
+    await ArticleToFavorite.find({
+      where: {
+        articleId: In(articleIds),
+        userId: event.auth?.user?.id,
+      },
+    }),
+    "articleId"
+  );
 
   const articleWithFavorite = articles.map((article) => {
     const favorite = favoriteArticles[article.id];

@@ -7,8 +7,9 @@ import baseMiddlewares from "../middleware/baseMiddlewares";
 import { authenticate } from "../middleware/authenticate";
 import { APIGatewayProxyEventExtend } from "../interface";
 import { Article } from "../entity/Article";
-import { User } from "../entity/User";
 import { UserToFollower } from "../entity/UserToFollower";
+import keyBy from "lodash/keyBy";
+import { ArticleToFavorite } from "../entity/ArticleToFavorite";
 
 const middlewares = [...baseMiddlewares, authenticate({ required: true })];
 
@@ -45,13 +46,33 @@ const handler = async (
     loadRelationIds: true,
   });
 
+  const articleIds = articles.map((article) => article.id);
+  // find favorite article
+  const favoriteArticles = keyBy(
+    await ArticleToFavorite.find({
+      where: {
+        articleId: In(articleIds),
+        userId: event.auth?.user?.id,
+      },
+    }),
+    "articleId"
+  );
+  const articleWithFavorite = articles.map((article) => {
+    const favorite = favoriteArticles[article.id];
+
+    return {
+      ...article,
+      favorite: !!favorite,
+    };
+  });
+
   return {
     statusCode: 200,
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      articles,
+      articles: articleWithFavorite,
       count: articles.length,
     }),
   };

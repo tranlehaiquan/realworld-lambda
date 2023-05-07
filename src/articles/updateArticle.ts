@@ -9,6 +9,7 @@ import { validator } from "../middleware/validator";
 import baseMiddlewares from "../middleware/baseMiddlewares";
 import { authenticate } from "../middleware/authenticate";
 import { APIGatewayProxyEventExtend } from "../interface";
+import { Tag } from "../entity/Tag";
 
 const schema = yup.object().shape({
   body: yup.object().shape({
@@ -47,10 +48,12 @@ const handler = async (
   const { title, description, body, tagList } =
     event.body as SchemaBody["body"];
 
+  const tags = await Tag.handleAddTags([...new Set(tagList || [])]);
+
   article.title = title || article.title;
   article.description = description || article.description;
   article.body = body || article.body;
-  article.tagList = tagList || article.tagList;
+  article.tagList = tagList ? (tags as any) : article.tagList;
 
   await article.save();
 

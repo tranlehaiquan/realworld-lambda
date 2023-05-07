@@ -1,8 +1,9 @@
 // create Entity Article
 
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, ManyToMany, JoinTable } from "typeorm";
 import { User } from "./User";
 import toSlug from "../utils/toSlug";
+import { Tag } from "./Tag";
 
 @Entity()
 export class Article extends BaseEntity {
@@ -21,9 +22,6 @@ export class Article extends BaseEntity {
   @Column({ unique: true })
   slug: string;
 
-  @Column("text", { array: true, nullable: true })
-  tagList: string[];
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -33,6 +31,10 @@ export class Article extends BaseEntity {
   @ManyToOne(() => User)
   @JoinColumn({ name: "authorId" })
   author: User;
+
+  @ManyToMany(() => Tag, (tag) => tag.articles)
+  @JoinTable()
+  tagList: Tag[]
 
   @BeforeInsert()
   async beforeInsert() {
