@@ -61,8 +61,6 @@ provider:
 
 Update `src/data-source.ts` with the noted above after create database
 
-```ts
-
 **Deploy**
 
 ```bash
