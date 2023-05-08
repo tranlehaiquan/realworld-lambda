@@ -9,6 +9,13 @@ provider:
     JWT_TOKEN_KEY: ${env:jwt, "hello"}
   stage: development
   region: ap-southeast-1
+  vpc:
+    securityGroupIds:
+      - sg-088a45d7f13efc1b2
+    subnetIds:
+      - subnet-0b3fcbbf1d9434338
+      - subnet-047066056a5270ad8
+      - subnet-06922adb28d6b894d
 
 functions:
   signIn:
