@@ -1,17 +1,18 @@
+org: qtran
+app: realworld-lambda
 service: realworld-lambda
 frameworkVersion: '3'
-useDotenv: true
 
 provider:
   name: aws
   runtime: nodejs18.x
   environment:
-    JWT_TOKEN_KEY: ${env:jwt}
-    DB_HOST: ${env:DB_HOST}
-    DB_PORT: ${env:DB_PORT}
-    DB_USERNAME: ${env:DB_USERNAME}
-    DB_PASSWORD: ${env:DB_PASSWORD}
-    DB_DATABASE: ${env:DB_DATABASE}
+    JWT_TOKEN_KEY: ${param:jwt}
+    DB_HOST: ${param:DB_HOST}
+    DB_PORT: ${param:DB_PORT}
+    DB_USERNAME: ${param:DB_USERNAME}
+    DB_PASSWORD: ${param:DB_PASSWORD}
+    DB_DATABASE: ${param:DB_DATABASE}
   stage: development
   region: ap-southeast-1
   vpc:

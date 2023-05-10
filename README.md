@@ -26,6 +26,12 @@ Run this command to initialize a new project in a new working directory.
 yarn install
 ```
 
+**Install Serverless Framework**
+
+```bash
+npm install -g serverless
+```
+
 **Create database**
 
 https://docs.aws.amazon.com/lambda/latest/dg/services-rds-tutorial.html#w122aac77d191c13c31
@@ -43,11 +49,6 @@ Update serverless.yml with the noted above after create database
 
 ```yml
 provider:
-  name: aws
-  runtime: nodejs18.x
-  environment:
-    DYNAMODB_NAMESPACE: ${opt:stage, "dev"}
-    JWT_TOKEN_KEY: ${env:jwt, "hello"}
   stage: development
   region: ap-southeast-1
   vpc:
@@ -57,6 +58,17 @@ provider:
       - subnet-0b3fcbbf1d9434338
       - subnet-047066056a5270ad8
       - subnet-06922adb28d6b894d
+```
+
+**Update params in Serverless Dashboard**
+
+```
+DB_USERNAME
+DB_PASSWORD
+DB_PORT
+jwt
+DB_DATABASE
+DB_HOST
 ```
 
 Update `src/data-source.ts` with the noted above after create database
