@@ -7,7 +7,7 @@ const fields = {
     .string()
     .email("Email must be a valid email")
     .required("Email is required"),
-  password: yup.string().required("Password is required"),
+  password: yup.string().required("Password is required").min(8),
   id: yup.string().required("Id is required"),
   bio: yup.string(),
   image: yup.string().url(),
