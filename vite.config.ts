@@ -7,6 +7,7 @@ export default defineConfig({
     env: {
       JWT_TOKEN_KEY: 'hello'
     },
+    setupFiles: './setupTest.ts',
   },
   plugins: [
     // Vite plugin
