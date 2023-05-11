@@ -21,7 +21,7 @@ const middlewares = [
   }),
 ];
 
-const handler = async (
+export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   const { body }: any = event;
