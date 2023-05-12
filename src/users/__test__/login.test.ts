@@ -4,14 +4,6 @@ import { User } from "../../entity/User";
 import { login } from "../login";
 import { signJWT } from "../../utils/jwt";
 
-vi.mock("../../entity/User", () => {
-  return {
-    User: {
-      findUserByEmailAndPassword: vi.fn(),
-    },
-  };
-});
-
 vi.mock("../../utils/jwt", () => {
   return {
     signJWT: vi.fn(),
