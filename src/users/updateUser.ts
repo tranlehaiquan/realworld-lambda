@@ -6,11 +6,13 @@ import { authenticate } from "../middleware/authenticate";
 import { User } from "../entity/User";
 import { connect } from "../data-source";
 import baseMiddlewares from "../middleware/baseMiddlewares";
-import { getSchemaByFields } from "../yup/getSchema";
 import { validator } from "../middleware/validator";
 
 const schema = yup.object().shape({
-  body: getSchemaByFields(["bio"]),
+  body: yup.object().shape({
+    bio: yup.string().nullable(),
+    image: yup.string().url().nullable(),
+  }),
 });
 
 const middlewares = [...baseMiddlewares, authenticate(), validator({ schema })];
