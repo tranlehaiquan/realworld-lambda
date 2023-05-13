@@ -20,7 +20,7 @@ describe("get tags", () => {
   afterEach(() => {
     vi.resetAllMocks();
   });
-  
+
   it("Should return tags", async () => {
     (Tag.find as any).mockResolvedValueOnce([]);
 

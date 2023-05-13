@@ -21,7 +21,7 @@ export class Tag extends BaseEntity {
   @ManyToMany(() => Article, (article) => article.tagList)
   articles: Article[];
 
-  static async handleAddTags (tags: string[]) {
+  static async handleAddTags(tags: string[]) {
     // check if tag exist
     const existingTags = await Tag.find({
       where: {
@@ -42,5 +42,5 @@ export class Tag extends BaseEntity {
 
     const allTags = [...existingTags, ...newTagsInserted.identifiers];
     return allTags;
-  };
+  }
 }

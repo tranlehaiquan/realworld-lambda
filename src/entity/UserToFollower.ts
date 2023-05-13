@@ -13,14 +13,14 @@ export class UserToFollower extends BaseEntity {
   id: number;
 
   @Column()
-  public userId: number
+  public userId: number;
 
   @ManyToOne(() => User, (user) => user)
   user: User;
 
   @Column()
-  public followerId: number
-  
+  public followerId: number;
+
   @ManyToOne(() => User, (user) => user)
   follower: User;
 }

@@ -52,9 +52,10 @@ export class User extends BaseEntity {
     email: string,
     password: string
   ): Promise<User> {
-    const user = await this.findOne({ where: { email }, select: [
-      'id', 'username', 'email', 'salt', 'hash'
-    ] });
+    const user = await this.findOne({
+      where: { email },
+      select: ["id", "username", "email", "salt", "hash"],
+    });
 
     if (!user) {
       return null;

@@ -1,6 +1,18 @@
 // create Entity Article
 
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, ManyToMany, JoinTable } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BeforeInsert,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { User } from "./User";
 import toSlug from "../utils/toSlug";
 import { Tag } from "./Tag";
@@ -34,10 +46,13 @@ export class Article extends BaseEntity {
 
   @ManyToMany(() => Tag, (tag) => tag.articles)
   @JoinTable()
-  tagList: Tag[]
+  tagList: Tag[];
 
   @BeforeInsert()
   async beforeInsert() {
-    this.slug = toSlug(this.title) + "-" + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+    this.slug =
+      toSlug(this.title) +
+      "-" +
+      ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
   }
 }

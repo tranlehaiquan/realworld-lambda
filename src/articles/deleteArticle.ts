@@ -29,7 +29,7 @@ const handler = async (
     },
     loadRelationIds: {
       relations: ["author"],
-    }
+    },
   });
 
   if (!article) {

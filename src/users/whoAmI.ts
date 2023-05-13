@@ -5,10 +5,7 @@ import { User } from "../entity/User";
 import { connect } from "../data-source";
 import baseMiddlewares from "../middleware/baseMiddlewares";
 
-const middlewares = [
-  ...baseMiddlewares,
-  authenticate(),
-];
+const middlewares = [...baseMiddlewares, authenticate()];
 
 const handler = async (event) => {
   const { auth } = event;

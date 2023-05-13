@@ -4,8 +4,8 @@ import createError from "http-errors";
 import { verifyJWT } from "../utils/jwt";
 
 type Options = {
-  required: boolean
-}
+  required: boolean;
+};
 
 export const authenticate = (options: Options = { required: true }) => {
   const { required } = options;
@@ -16,15 +16,15 @@ export const authenticate = (options: Options = { required: true }) => {
     const event = handler.event;
     const authorization = event.headers?.authorization;
 
-    if(!authorization && required) {
+    if (!authorization && required) {
       throw new createError.Unauthorized(
         JSON.stringify({
-          message: 'Authorization header is required',
+          message: "Authorization header is required",
         })
       );
     }
 
-    const token = (authorization || '').split(' ')[1];
+    const token = (authorization || "").split(" ")[1];
     try {
       const result = await verifyJWT(token);
       event.auth = {
@@ -32,7 +32,7 @@ export const authenticate = (options: Options = { required: true }) => {
         token,
       };
     } catch (err) {
-      if(!required) {
+      if (!required) {
         return;
       }
 
