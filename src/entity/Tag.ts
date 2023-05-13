@@ -4,14 +4,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
   ManyToMany,
   In,
 } from "typeorm";
 import { Article } from "./Article";
+import { BaseEntityCustom } from "./BaseEntityCustom";
 
 @Entity()
-export class Tag extends BaseEntity {
+export class Tag extends BaseEntityCustom {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

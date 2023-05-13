@@ -2,16 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
   ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
 import { Article } from "./Article";
+import { BaseEntityCustom } from "./BaseEntityCustom";
 
 @Entity()
-export class ArticleToFavorite extends BaseEntity {
+export class ArticleToFavorite extends BaseEntityCustom {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

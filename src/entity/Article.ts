@@ -4,11 +4,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
   ManyToOne,
   JoinColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
   BeforeInsert,
   ManyToMany,
   JoinTable,
@@ -16,9 +13,10 @@ import {
 import { User } from "./User";
 import toSlug from "../utils/toSlug";
 import { Tag } from "./Tag";
+import { BaseEntityCustom } from "./BaseEntityCustom";
 
 @Entity()
-export class Article extends BaseEntity {
+export class Article extends BaseEntityCustom {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -33,12 +31,6 @@ export class Article extends BaseEntity {
 
   @Column({ unique: true })
   slug: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "authorId" })

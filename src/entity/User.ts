@@ -2,11 +2,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
-  ManyToMany,
-  JoinTable,
 } from "typeorm";
 import { randomBytes, pbkdf2Sync } from "crypto";
+import { BaseEntityCustom } from "./BaseEntityCustom";
 
 export type UserExport = {
   id: number;
@@ -17,7 +15,7 @@ export type UserExport = {
 };
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends BaseEntityCustom {
   @PrimaryGeneratedColumn("uuid")
   id: number;
 
