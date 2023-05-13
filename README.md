@@ -71,6 +71,8 @@ DB_DATABASE
 DB_HOST
 ```
 
+![serverless params](images/serverless-params.png "Serverless params")
+
 Update `src/data-source.ts` with the noted above after create database
 
 **Deploy**
